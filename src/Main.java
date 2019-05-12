@@ -6,9 +6,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import com.japierre.ClipboardCache.entity.Model;
 
@@ -29,6 +33,8 @@ public class Main extends Application {
 	
 	//make view for cache
 	Scene cacheView = new Scene(cacheRoot, 300, 600);
+	VBox cachePane;
+	Button toFrontButton;
 	
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -56,11 +62,24 @@ public class Main extends Application {
 				
 				try {
 					
+					//make cache, set up cache scene.
 					int size = Integer.valueOf(input);
 					model = new Model(size);
 					primaryStage.setScene(cacheView);
-					primaryStage.show();
 					
+					cachePane = new VBox(8);
+					toFrontButton = new Button("Copy to clipboard");
+					cacheRoot.getChildren().addAll(cachePane,toFrontButton);
+					cacheRoot.setAlignment(Pos.CENTER);
+					
+					//set up size for the cache pane
+					cachePane.setBackground(new Background(new BackgroundFill(Color.WHITE,new CornerRadii(0),null)));
+					cachePane.setMinSize(270, 500);
+					cachePane.setMaxSize(270,550);
+					
+					primaryStage.show();
+				
+				//if the input wasn't an int, don't switch but show the error message
 				} catch(NumberFormatException e) {
 					errorMessage.setVisible(true);
 				}
