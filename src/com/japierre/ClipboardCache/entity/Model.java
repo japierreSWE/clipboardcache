@@ -3,6 +3,8 @@ package com.japierre.ClipboardCache.entity;
 import java.util.LinkedList;
 import java.util.List;
 
+import javafx.scene.control.Label;
+
 public class Model {
 	
 	int cacheSize; //the maximum size of the cache
@@ -47,6 +49,22 @@ public class Model {
 			cache.addFirst(s);
 		}
 		return true;
+	}
+	
+	public void push(Label selected) {
+		
+		String text = selected.getText();
+		int indexOfFirstSpace = text.indexOf(" ");
+		//each label's text starts with "number. "
+		//so, the text coming after the space is an
+		//element of the cache.
+		
+		//get it, remove it, then put it in front.
+		String element = text.substring(indexOfFirstSpace + 1);
+		cache.remove(element);
+		currentClipboardContents = "";
+		add(element);
+		
 	}
 	
 }

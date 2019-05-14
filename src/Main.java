@@ -25,17 +25,20 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.FlavorEvent;
 import java.awt.datatransfer.FlavorListener;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import com.japierre.ClipboardCache.controller.ClipboardChangeController;
+import com.japierre.ClipboardCache.controller.PushController;
 import com.japierre.ClipboardCache.entity.Model;
 
 public class Main extends Application {
 	
 	Model model;
+	Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
 	
 	//set up scene and layout.
 	VBox setupRoot = new VBox(8);
@@ -105,7 +108,7 @@ public class Main extends Application {
 	/** Prepares the event listener that runs when the clipboard changes */
 	private void setupClipboardListener() {
 
-		Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+		
 		
 		//check the clipboard every 250 milliseconds.
 		Timeline clipboardChecker = new Timeline(new KeyFrame(Duration.millis(250), new EventHandler<ActionEvent>() {
@@ -186,6 +189,27 @@ public class Main extends Application {
 					cachePane.setBackground(new Background(new BackgroundFill(Color.WHITE,new CornerRadii(0),null)));
 					cachePane.setMinSize(270, 500);
 					cachePane.setMaxSize(270,550);
+					
+					toFrontButton.setOnAction(new EventHandler<ActionEvent> () {
+						
+						public void handle(ActionEvent e) {
+							
+							boolean pushed = new PushController().push(model, selected);
+							String text = selected.getText();
+							int indexOfFirstSpace = text.indexOf(" ");
+							//each label's text starts with "number. "
+							//so, the text coming after the space is an
+							//element of the cache.
+							
+							//get it, remove it, then put it in front.
+							String element = text.substring(indexOfFirstSpace + 1);
+							cb.setContents(new StringSelection(element), null);
+							
+							if(pushed) displayCache();
+							
+						}
+						
+					});
 					
 					primaryStage.show();
 					
