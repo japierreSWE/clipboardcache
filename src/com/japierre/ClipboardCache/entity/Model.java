@@ -32,6 +32,7 @@ public class Model {
 	/**adds a string to the cache */
 	public void add(String s) {
 		
+		//don't change the cache if the clipboard hasn't changed.
 		if(s.equals(currentClipboardContents)) {
 			return;
 		} else {

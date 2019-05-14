@@ -77,16 +77,18 @@ public class Main extends Application {
 	private void setupClipboardListener() {
 
 		Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-
+		
+		//check the clipboard every 250 milliseconds.
 		Timeline clipboardChecker = new Timeline(new KeyFrame(Duration.millis(250), new EventHandler<ActionEvent>() {
 
 			public void handle(ActionEvent event) {
 
 				Transferable obj = cb.getContents(this);
 
-				//only do this if the clipboard changed to a string.
+				//only do the following if the clipboard data is a string.
 				if(obj.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-
+					
+					//get the string, try to add it to cache, then show the cache.
 					try {
 						String contents = (String)obj.getTransferData(DataFlavor.stringFlavor);
 						new ClipboardChangeController().add(model, contents);
@@ -108,7 +110,7 @@ public class Main extends Application {
 		
 		clipboardChecker.setCycleCount(Timeline.INDEFINITE);
 		clipboardChecker.play();
-		
+		//turn on this recurring event.
 	}
 		
 	
