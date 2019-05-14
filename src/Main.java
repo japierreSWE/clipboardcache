@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -15,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -50,7 +52,9 @@ public class Main extends Application {
 	Scene cacheView = new Scene(cacheRoot, 300, 600);
 	VBox cachePane;
 	Button toFrontButton;
+	ArrayList<HBox> cacheLabelContainers;
 	ArrayList<Label> cacheLabels;
+	Label selected;
 	
 	/** Make the pane in the cache view display the cache */
 	private void displayCache() {
@@ -68,7 +72,32 @@ public class Main extends Application {
 		
 		//then, add them to the pane.
 		for(Label label : cacheLabels) {
-			cachePane.getChildren().add(label);
+			label.setFont(new Font("Arial", 20));
+			//cachePane.getChildren().add(label);
+			
+			HBox container = new HBox();
+			container.getChildren().add(label);
+			cacheLabelContainers.add(container);
+			cachePane.getChildren().add(container);
+			
+			//if the label gets clicked, that's the selected one.
+			container.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				
+				public void handle(MouseEvent event) {
+					
+					HBox node = (HBox)event.getSource();
+					selected = (Label)node.getChildren().get(0);
+					
+					for(Label label : cacheLabels) {
+						label.setBackground(null);
+					}
+					
+					selected.setBackground(new Background(new BackgroundFill(Color.YELLOW,new CornerRadii(0),null)));
+					
+				}
+				
+			});
+			
 		}
 		
 	}
@@ -91,8 +120,9 @@ public class Main extends Application {
 					//get the string, try to add it to cache, then show the cache.
 					try {
 						String contents = (String)obj.getTransferData(DataFlavor.stringFlavor);
-						new ClipboardChangeController().add(model, contents);
-						displayCache();
+						boolean changed = new ClipboardChangeController().add(model, contents);
+						
+						if(changed) displayCache();
 
 					} catch (UnsupportedFlavorException e1) {
 
@@ -150,6 +180,7 @@ public class Main extends Application {
 					cacheRoot.getChildren().addAll(cachePane,toFrontButton);
 					cacheRoot.setAlignment(Pos.CENTER);
 					cacheLabels = new ArrayList<Label>();
+					cacheLabelContainers = new ArrayList<HBox>();
 					
 					//set up size for the cache pane and give it a white background
 					cachePane.setBackground(new Background(new BackgroundFill(Color.WHITE,new CornerRadii(0),null)));

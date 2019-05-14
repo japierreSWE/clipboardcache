@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Model {
 	
-	int cacheSize; //the size of the cache
+	int cacheSize; //the maximum size of the cache
 	LinkedList<String> cache;
 	String currentClipboardContents;
 	
@@ -29,12 +29,12 @@ public class Model {
 		return cache;
 	}
 	
-	/**adds a string to the cache */
-	public void add(String s) {
+	/**adds a string to the cache. returns whether cache changed */
+	public boolean add(String s) {
 		
 		//don't change the cache if the clipboard hasn't changed.
 		if(s.equals(currentClipboardContents)) {
-			return;
+			return false;
 		} else {
 			currentClipboardContents = s;
 		}
@@ -46,7 +46,7 @@ public class Model {
 		} else {
 			cache.addFirst(s);
 		}
-		
+		return true;
 	}
 	
 }
