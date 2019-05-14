@@ -37,7 +37,7 @@ public class Main extends Application {
 	
 	//set up scene and layout.
 	VBox setupRoot = new VBox(8);
-	VBox cacheRoot = new VBox();
+	VBox cacheRoot = new VBox(8);
 	
 	//make view for setup
 	Scene setupView = new Scene(setupRoot, 400, 100);
