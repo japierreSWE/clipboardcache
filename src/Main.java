@@ -55,7 +55,7 @@ public class Main extends Application {
 	HBox labelTextfieldContainer = new HBox(8);
 	
 	//make view for cache
-	Scene cacheView = new Scene(cacheRoot, 300, 600);
+	Scene cacheView;
 	VBox cachePane;
 	Button toFrontButton;
 	ArrayList<HBox> cacheLabelContainers;
@@ -168,6 +168,8 @@ public class Main extends Application {
 		//shouldn't see error message yet.
 		errorMessage.setVisible(false);
 		
+		button.setDefaultButton(true); //this activates if enter button is pressed.
+		
 		//give the button an event handler
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -181,9 +183,13 @@ public class Main extends Application {
 					//make cache, set up cache scene.
 					int size = Integer.valueOf(input);
 					model = new Model(size);
+					
+					//each item is 25px tall. add 50 for button space
+					cacheView = new Scene(cacheRoot, 300, 25*size+50);
+					
 					primaryStage.setScene(cacheView);
 					
-					cachePane = new VBox(0);
+					cachePane = new VBox();
 					toFrontButton = new Button("Copy to clipboard");
 					cacheRoot.getChildren().addAll(cachePane,toFrontButton);
 					cacheRoot.setAlignment(Pos.CENTER);
@@ -192,8 +198,8 @@ public class Main extends Application {
 					
 					//set up size for the cache pane and give it a white background
 					cachePane.setBackground(new Background(new BackgroundFill(Color.WHITE,new CornerRadii(0),null)));
-					cachePane.setMinSize(270, 500);
-					cachePane.setMaxSize(270,550);
+					cachePane.setMinSize(270, 25*size);
+					cachePane.setMaxSize(270,25*size);
 					
 					toFrontButton.setOnAction(new EventHandler<ActionEvent> () {
 						
