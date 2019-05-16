@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -82,6 +85,8 @@ public class Main extends Application {
 			container.getChildren().add(label);
 			cacheLabelContainers.add(container);
 			cachePane.getChildren().add(container);
+			
+			container.setBorder(new Border(new BorderStroke(null, null, Color.LIGHTGREY, null, null, null, BorderStrokeStyle.SOLID, null, null, null, null)));
 			
 			//if the label gets clicked, that's the selected one.
 			container.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -178,7 +183,7 @@ public class Main extends Application {
 					model = new Model(size);
 					primaryStage.setScene(cacheView);
 					
-					cachePane = new VBox(8);
+					cachePane = new VBox(0);
 					toFrontButton = new Button("Copy to clipboard");
 					cacheRoot.getChildren().addAll(cachePane,toFrontButton);
 					cacheRoot.setAlignment(Pos.CENTER);
