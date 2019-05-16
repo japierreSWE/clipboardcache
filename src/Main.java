@@ -20,6 +20,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -183,9 +184,16 @@ public class Main extends Application {
 					//make cache, set up cache scene.
 					int size = Integer.valueOf(input);
 					model = new Model(size);
-					
+					double paneHeight = 25*size;
 					//each item is 25px tall. add 50 for button space
-					cacheView = new Scene(cacheRoot, 300, 25*size+50);
+					
+					//if the calculated pane height is greater than the screen's, make it
+					//equal screen height - 50
+					if(paneHeight > Screen.getPrimary().getBounds().getHeight()) {
+						paneHeight = Screen.getPrimary().getBounds().getHeight() - 100;
+					}
+					
+					cacheView = new Scene(cacheRoot, 300, paneHeight+50);
 					
 					primaryStage.setScene(cacheView);
 					
@@ -198,8 +206,8 @@ public class Main extends Application {
 					
 					//set up size for the cache pane and give it a white background
 					cachePane.setBackground(new Background(new BackgroundFill(Color.WHITE,new CornerRadii(0),null)));
-					cachePane.setMinSize(270, 25*size);
-					cachePane.setMaxSize(270,25*size);
+					cachePane.setMinSize(270, paneHeight);
+					cachePane.setMaxSize(270,paneHeight);
 					
 					toFrontButton.setOnAction(new EventHandler<ActionEvent> () {
 						
@@ -221,7 +229,8 @@ public class Main extends Application {
 						}
 						
 					});
-					
+					primaryStage.setAlwaysOnTop(true);
+					primaryStage.setY(0);
 					primaryStage.show();
 					
 					//we also need to make the clipboard listener now that
